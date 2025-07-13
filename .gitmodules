@@ -1,0 +1,3 @@
+[submodule "yasumi"]
+	path = vendor/mgweb/yasumi
+	url = git@github.com:mgwebgroup/yasumi.git
