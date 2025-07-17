@@ -1,3 +1,4 @@
 [submodule "yasumi"]
-	path = vendor/mgweb/yasumi
+	path = lib/mgweb/yasumi
 	url = git@github.com:mgwebgroup/yasumi.git
+	branch = nyse-closures
