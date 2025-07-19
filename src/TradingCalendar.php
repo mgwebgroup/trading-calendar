@@ -23,7 +23,7 @@ class TradingCalendar extends \FilterIterator
     {
         $date = $this->getInnerIterator()->current();
         try {
-			$holidays = Yasumi::create('USA', (int) $date->format('Y'));
+			$holidays = Yasumi::create(self::PROVIDER, (int) $date->format('Y'));
             return $holidays->isWorkingDay($date);
         } catch (\ReflectionException $e) {
             throw new \Exception($e->getMessage());
