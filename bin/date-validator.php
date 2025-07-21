@@ -1,22 +1,21 @@
+#!/usr/bin/env php 
 <?php
-require 'Autoloader.php';
+require dirname(__DIR__).'/lib/Autoloader.php';
 
 use MGWeb\DailyIterator;
-use MGWeb\TradingCalendar;
+use MGWeb\NYSECalendar;
 
-define('STRING_LEN', 10);
-
-$fh = fopen('php://stdin', 'r');
+$stdin = fopen('php://stdin', 'r');
 
 $dailyIterator = new DailyIterator();
 $dailyIterator->setDirection(1);
 $timeZone = new \DateTimeZone('America/New_York');
-$tradingCalendar = new TradingCalendar($dailyIterator);
+$tradingCalendar = new NYSECalendar($dailyIterator);
 
 $counter = 1;
 
 try {
-	if (($inputDateString = fgets($fh)) != PHP_EOL) {
+	if (($inputDateString = fgets($stdin)) != PHP_EOL) {
 		$inputDate = new DateTime($inputDateString, $timeZone);
 		$dailyIterator->setStartDate($inputDate, $timeZone);
 		foreach ($tradingCalendar as $expectedDate) {
@@ -26,7 +25,7 @@ try {
 					$counter, $inputDate->format('Y-m-d'), $expectedDate->format('Y-m-d')
 					)
 				);
-			while (($inputDateString = fgets($fh)) == PHP_EOL)
+			while (($inputDateString = fgets($stdin)) == PHP_EOL)
 				$counter++;
 			if (!$inputDateString)
 				break;
@@ -37,7 +36,9 @@ try {
 		throw new \Exception('Either no dates in the input file, or first line is empty.');
 	}
 } catch (\Exception $e) {
-	printf('ERROR: %s'.PHP_EOL, $e->getMessage());
+	$stderr = fopen('php://stderr', 'w');
+	fwrite($stderr, sprintf('ERROR: %s'.PHP_EOL, $e->getMessage()));
+	fclose($stderr);
 	exit(1);
 }
 

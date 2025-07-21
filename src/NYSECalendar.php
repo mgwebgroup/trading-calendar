@@ -8,7 +8,7 @@ use Yasumi\Yasumi;
 // Uses holiday provider for market closures specific to NYSE and NASDAQ exchanges
 // 
 
-class TradingCalendar extends \FilterIterator
+class NYSECalendar extends \FilterIterator
 {
 	public const PROVIDER = 'USA/NYSE';
 
