@@ -17,7 +17,7 @@ git clone --recurse-submodules git@github.com:mgweb/trading-calendar.git
 3. USAGE
 
 ```
-./bin/date-validator.php < DATES
+./bin/date-validator < DATES
 ```
 DATES must have dates only, each on a separate line, like 
 	2025-05-01
@@ -29,7 +29,7 @@ Format of each date can be any format accepted by [PHP DateTime constructor](htt
 
 Example:
 ```
-for DAY in {1..30}; do date --date "2025-05-${DAY}" +%Y-%m-%d; done | ./bin/date-validator.php
+for DAY in {1..30}; do date --date "2025-05-${DAY}" +%Y-%m-%d; done | ./bin/date-validator
 
-echo "2022-02-22T06:00+03:00" | ./bin/date-validator.php
+echo "2022-02-22T06:00+03:00" | ./bin/date-validator
 ```
