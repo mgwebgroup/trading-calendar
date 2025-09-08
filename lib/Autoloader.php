@@ -3,7 +3,7 @@ $loader = new Psr4AutoloaderClass;
 $loader->register();
 
 $loader->addNamespace('MGWeb', dirname(__DIR__).'/src');
-$loader->addNamespace('Yasumi', dirname(__DIR__).'/lib/mgweb/yasumi/src/Yasumi');
+$loader->addNamespace('Yasumi', dirname(__DIR__).'/lib/azuyalabs/yasumi/src/Yasumi');
 
 
 class Psr4AutoloaderClass
