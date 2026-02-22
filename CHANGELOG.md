@@ -1,9 +1,16 @@
 # Changelog
 
-## [Unreleased]
+## [v1.1.0]
+
+### Changed
+
+- Add bin/date-generator script.
+- Add shell tests for bin/date-validator script.
+
+
+## [v1.0.0]
 
 ### Changed
 
 - Renamed bin/date-validator.php into bin/date-validator.
-- Added unit tests
 
