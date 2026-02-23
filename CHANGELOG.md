@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Add bin/date-generator script.
+- Add bin/date-generator script and its tests.
 - Add shell tests for bin/date-validator script.
 
 

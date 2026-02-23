@@ -1,0 +1,67 @@
+#!/usr/bin/env php 
+<?php
+require dirname(__DIR__).'/lib/Autoloader.php';
+
+use MGWeb\DailyIterator;
+use MGWeb\NYSECalendar;
+
+
+if (php_sapi_name() !== 'cli') {
+    fwrite(STDERR, "This script must be run from the command line.\n");
+    exit(1);
+}
+
+$shortopts = "";
+$longopts  = ["format:"];
+$options   = getopt($shortopts, $longopts);
+
+// Default format for output dates.
+$format = isset($options['format']) ? $options['format'] : 'Y-m-d';
+
+// Rebuild positional arguments (strip options from $argv).
+$argv = $_SERVER['argv'];
+array_shift($argv); // remove script name
+
+$positional = [];
+for ($i = 0; $i < count($argv); $i++) {
+    $arg = $argv[$i];
+
+    if (str_starts_with($arg, '--format')) {
+        // Handle both --format=value and --format value.
+        if ($arg === '--format' && isset($argv[$i+1]) && $argv[$i+1][0] !== '-') {
+            $i++; // skip the value
+        }
+        continue;
+    }
+
+    $positional[] = $arg;
+}
+
+if (count($positional) < 1) {
+    fwrite(STDERR, "Usage: bin/date-generator [--format=FORMAT] START_DATE [END_DATE]\n");
+    exit(1);
+}
+
+$startDateString = $positional[0];
+$endDateString   = $positional[1] ?? null;
+try {
+    $timeZone = new \DateTimeZone('America/New_York');
+    $startDate = new DateTime($startDateString, $timeZone);
+    $endDate = new DateTime($endDateString, $timeZone);
+
+    if ($endDate < $startDate) throw new Exception('End date cannot be before the start date');
+
+    $dailyIterator = new DailyIterator();
+    $dailyIterator->setStartDate($startDate);
+    $tradingCalendar = new NYSECalendar($dailyIterator);
+
+    foreach ($tradingCalendar as $date) {
+        if ($date > $endDate)
+            break;    
+        fwrite(STDOUT, $date->format($format).PHP_EOL);
+    }
+
+} catch (Exception $e) {
+	fwrite(STDERR, sprintf('ERROR: %s'.PHP_EOL, $e->getMessage()));
+	exit(1);
+}
